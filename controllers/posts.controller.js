@@ -24,17 +24,17 @@ module.exports.create = (req, res, next) => {
 }
 
 module.exports.get = (req, res, next) => {
-    Post.findById(req.params.id)
-      .populate('comments')
-      .then(post => {
-        if (!post) {
-          throw createError(404, 'Post not found')
-        } else {
-          res.json(post)
-        }
-      })
-      .catch(next)
-   }
+  Post.findById(req.params.id)
+    .populate('comments')
+    .then(post => {
+      if (!post) {
+        throw createError(404, 'Post not found')
+      } else {
+        res.json(post)
+      }
+    })
+    .catch(next)
+}
    
 module.exports.update = (req, res, next) => {
   Post.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })

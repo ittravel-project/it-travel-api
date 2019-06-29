@@ -12,7 +12,7 @@ module.exports.register = (req, res, next) => {
         .catch(next);
 }
 
-module.exports.authenticate = (req, res, next) => {
+module.exports.login = (req, res, next) => {
     passport.authenticate('auth-local', (error, user, message) => {
         if (error) next(error) 
         else if (!user) throw createError(401,message)
@@ -44,4 +44,21 @@ module.exports.editProfile = (req, res, next) => {
     user.save()
         .then(user => res.status(201).json(user))
         .catch(next)
+}
+
+module.exports.loginWithIDPCallback = (req, res, next) => {
+    const { idp } = req.params; 
+    passport.authenticate(`${idp}-auth`, (error, user) => {
+      if (error) {
+        next(error);
+      } else {
+        req.login(user, (error) => {
+          if (error) {
+            next(error)
+          } else {
+            res.redirect('/profile');
+          }
+        })
+      }
+    })(req, res, next);
 }

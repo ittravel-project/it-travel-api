@@ -32,11 +32,11 @@ const userSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    // social: {
-    //     googleId: {
-    //       type: String
-    //     },
-    // },
+    social: {
+        googleId: {
+          type: String
+        },
+    },
     avatarURL: {
         type: String,
         match: [URL_PATTERN, 'Invalid avatar URL pattern']

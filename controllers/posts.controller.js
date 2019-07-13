@@ -14,9 +14,11 @@ module.exports.list = (req, res, next) => {
 
 module.exports.create = (req, res, next) => {
     const post = new Post ({
-        attachment: req.body.attachment,
-        message: req.body.message,
-        title: req.body.title
+      title: req.body.title,
+      creater: req.user.name,
+      city: req.body.city,
+      attachment: req.body.attachment,
+      message: req.body.message
     }) 
     post.save()
         .then (post => res.status(201).json(post))
@@ -24,8 +26,8 @@ module.exports.create = (req, res, next) => {
 }
 
 module.exports.get = (req, res, next) => {
-  Post.findById(req.params.id)
-    .populate('comments')
+  Post.find(req.params.userId)
+    .populate('posts')
     .then(post => {
       if (!post) {
         throw createError(404, 'Post not found')

@@ -3,19 +3,28 @@ const mongoose = require('mongoose')
 const URL_PATTERN = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 
 const postSchema = new mongoose.Schema({
+    title :{
+        type:String,
+        required:true
+    },
+    city: {
+        type: String,
+        required: 'City is required',
+    },
     attachment: {
         type: String,
         match: [URL_PATTERN, 'Invalid url pattern'],
         required:true,
         validate: [validateAttachments, 'Post needs at least one attachment'],
     },
-    title :{
-        type:String,
-        required:true
-    },
     message: {
         type:String,
         required:['Message is required']
+    },
+    creater: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 }, {
     timestamps: true,

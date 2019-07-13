@@ -10,6 +10,7 @@ router.post('/login', auth.login);
 router.get('/logout', auth.logout);
 
 router.get('/profile', secure.isAuthenticated, auth.getProfile);
+router.get('/profilelist', secure.isAuthenticated, auth.getUserList);
 router.put('/profile', secure.isAuthenticated, uploader.single('avatar'), auth.editProfile);
 
 router.get('/authenticate/google', passport.authenticate('google-auth', { scope: ['openid', 'profile', 'email'] }))

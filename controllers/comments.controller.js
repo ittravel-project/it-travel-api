@@ -1,8 +1,20 @@
 const createError = require('http-errors');
 const Comment = require ('../models/comment.model');
+const MAX_COMMENT = 200;
+
+module.exports.list = (req, res, next) => {
+    Comment.find() 
+        .sort({
+            createdAt:-1
+        })
+        .limit(MAX_COMMENT)
+        .then (comments => res.json(comments))
+        .catch(next)
+}
 
 module.exports.create = (req, res, next) => {
     const comment = new Comment ({
+        name: req.user.name,
         text: req.body.text,
         post: req.params.postId
     });
@@ -35,3 +47,14 @@ module.exports.update = (req, res, next)=> {
         .catch(next)
 }
 
+module.exports.get = (req, res, next) => {
+    Comment.find({post: req.params.postId})
+        .then(comments => {
+            if (!comments) {
+            throw createError(404, 'Comment not found')
+            } else {
+            res.json(comments)
+            }
+        })
+        .catch(next)
+}

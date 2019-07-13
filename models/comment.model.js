@@ -1,9 +1,11 @@
 const mongoose = require ('mongoose')
 
 const commentSchema = new mongoose.Schema({
+    name: {
+        type: String
+    },
     text: {
         type: String,
-        required: 'text is required',
         min: 3,
         max: 100
     }, 
@@ -11,6 +13,9 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Post',
         required: true
+    },
+    time : { 
+        type : Date, default: Date.now 
     }
 }, {
     timestamps: true,

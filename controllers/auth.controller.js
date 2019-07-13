@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const User = require('../models/user.model')
 const passport = require('passport')
+const MAX_USERS = 200
 
 module.exports.register = (req, res, next) => {
     User.findOne({ email: req.body.email })
@@ -44,6 +45,16 @@ module.exports.editProfile = (req, res, next) => {
     user.save()
         .then(user => res.status(201).json(user))
         .catch(next)
+}
+
+module.exports.getUserList = (req, res, next) => {
+  User.find() 
+      .sort({
+          createdAt:-1
+      })
+      .limit(MAX_USERS)
+      .then (users => res.json(users))
+      .catch(next)
 }
 
 module.exports.loginWithIDPCallback = (req, res, next) => {

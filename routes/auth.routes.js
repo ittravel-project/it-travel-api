@@ -10,11 +10,15 @@ router.post('/login', auth.login);
 router.get('/logout', auth.logout);
 
 router.get('/profile', secure.isAuthenticated, auth.getProfile);
+
+router.get('/profile/:id', secure.isAuthenticated, auth.getUser);
 router.get('/profilelist', secure.isAuthenticated, auth.getUserList);
+
 router.put('/profile', secure.isAuthenticated, uploader.single('avatar'), auth.editProfile);
 
 router.get('/authenticate/google', passport.authenticate('google-auth', { scope: ['openid', 'profile', 'email'] }))
-router.get('/authenticate/:idp/callback', auth.loginWithIDPCallback)
+router.get('/authenticate/facebook', passport.authenticate('fb-auth', { scope: [ 'email'] }))
+router.get('/authenticate/:provider/callback', auth.loginWithProviderCallback)
 
 
 module.exports = router

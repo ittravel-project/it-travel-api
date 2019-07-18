@@ -33,9 +33,8 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     social: {
-        googleId: {
-          type: String
-        },
+        googleId: String,
+        facebookId: String
     },
     avatarURL: {
         type: String,

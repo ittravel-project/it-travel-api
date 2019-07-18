@@ -18,7 +18,7 @@ router.put('/profile', secure.isAuthenticated, uploader.single('avatar'), auth.e
 
 router.get('/authenticate/google', passport.authenticate('google-auth', { scope: ['openid', 'profile', 'email'] }))
 router.get('/authenticate/facebook', passport.authenticate('fb-auth', { scope: [ 'email'] }))
-router.get('/authenticate/:provider/callback', auth.loginWithProviderCallback)
+router.get('/authenticate/:idp/callback', auth.loginWithIDPCallback)
 
 
 module.exports = router

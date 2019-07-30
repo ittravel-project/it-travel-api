@@ -22,12 +22,14 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: 'Password is required',
-        match: [PASSWORD_PATTERN, 'Passwords must contain at least six characters, including uppercase, lowercase letters and numbers.']
+        required: 'Password is required'
     },
     city: {
         type: String,
-        required: 'City is required',
+        required: [
+            function() { return !this.social.googleId && !this.social.facebookId },
+            'City is required'
+        ],
     },
     description: {
         type: String

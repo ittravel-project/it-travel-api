@@ -40,13 +40,13 @@ passport.use('auth-local', new LocalStrategy({
 passport.use('google-auth', new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL || '/auth/google/callback',
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || '/authenticate/google/callback',
   }, authenticateOAuthUser));
 
 passport.use('fb-auth', new FBStrategy({
     clientID: process.env.FB_CLIENT_ID,
     clientSecret: process.env.FB_CLIENT_SECRET,
-    callbackURL: process.env.FB_CB_URL || '/auth/facebook/callback',
+    callbackURL: process.env.FB_CB_URL || '/authenticate/facebook/callback',
     profileFields: ['id', 'emails']
 }, authenticateOAuthUser));
   
@@ -57,14 +57,6 @@ function authenticateOAuthUser(accessToken, refreshToken, profile, next) {
     const email = profile.emails ? profile.emails[0].value : undefined;
     const avatarURL = profile.picture || profile.photos && profile.photos[0].value;
 
-    if (profile.provider === 'facebook') {
-        provider = 'facebookId'
-    } else if (profile.provider === 'google') {
-        provider = 'googleId';
-    } else {
-        next();
-    }
-
     User.findOne({
         $or: [
         { email: email },
@@ -73,16 +65,18 @@ function authenticateOAuthUser(accessToken, refreshToken, profile, next) {
     })
     .then(user => {
         if (user) {
+            console.log('user exist! continue solcial login')
             next(null, user);
         } else if (!user) {
+            console.log('user does not exist. register with social login')
             user = new User({
-            name: name,
-            email: email,
-            password: Math.random().toString(35),
-            social: {
-                [provider]: socialId
-            },
-            avatarURL: avatarURL
+                name: name,
+                email: email,
+                password: Math.random().toString(35),
+                social: {
+                    [provider]: socialId
+                },
+                avatarURL: avatarURL
             })
             return user.save()
             .then(user => next(null, user))

@@ -15,7 +15,8 @@ const commentSchema = new mongoose.Schema({
         required: true
     },
     time : { 
-        type : Date, default: Date.now 
+        type : Date, 
+        default: Date.now
     }
 }, {
     timestamps: true,

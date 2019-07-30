@@ -80,7 +80,7 @@ module.exports.loginWithIDPCallback = (req, res, next) => {
         if (error) {
           next(error)
         } else {
-          console.error('failed')
+          res.redirect('https://s-cape.herokuapp.com/home')
         }
       })
     }
